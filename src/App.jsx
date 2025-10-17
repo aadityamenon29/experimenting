@@ -1,6 +1,6 @@
-import { Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
-import TrainScene from './components/TrainScene'
+import { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
+import TrainScene from "./components/TrainScene";
 
 function App() {
   return (
@@ -9,14 +9,20 @@ function App() {
         <h1 className="title">TRAIN JOURNEY</h1>
         <div className="controls">
           <h3>Interactive Controls</h3>
-          <p><strong>Left Click + Drag:</strong> Rotate view</p>
-          <p><strong>Right Click + Drag:</strong> Pan around</p>
-          <p><strong>Scroll:</strong> Zoom in/out</p>
+          <p>
+            <strong>Left Click + Drag:</strong> Rotate view
+          </p>
+          <p>
+            <strong>Right Click + Drag:</strong> Pan around
+          </p>
+          <p>
+            <strong>Scroll:</strong> Zoom in/out
+          </p>
           <p>Explore the train and observe the passengers!</p>
         </div>
       </div>
       <Canvas
-        camera={{ position: [0, 1.6, 5], fov: 60 }}
+        camera={{ position: [-4, 1.8, 2], fov: 60 }}
         shadows
         gl={{ antialias: true, alpha: false }}
       >
@@ -25,7 +31,7 @@ function App() {
         </Suspense>
       </Canvas>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

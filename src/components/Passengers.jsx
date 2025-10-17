@@ -1,21 +1,21 @@
-import { forwardRef, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { forwardRef, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 
 const SKIN_TONES = {
-  fair: '#f4c29a',
-  tan: '#d9a372',
-  warm: '#c68642',
-  deep: '#8d5524'
-}
+  fair: "#f4c29a",
+  tan: "#d9a372",
+  warm: "#c68642",
+  deep: "#8d5524",
+};
 
 const HAIR_COLORS = {
-  black: '#1b1f27',
-  brown: '#3d2d1a',
-  blonde: '#c79f48',
-  auburn: '#8b3b2a',
-  grey: '#b5bcc9',
-  red: '#b43f3c'
-}
+  black: "#1b1f27",
+  brown: "#3d2d1a",
+  blonde: "#c79f48",
+  auburn: "#8b3b2a",
+  grey: "#b5bcc9",
+  red: "#b43f3c",
+};
 
 export default function Passengers() {
   return (
@@ -30,36 +30,41 @@ export default function Passengers() {
       <Doctor position={[-1.35, 0.9, -9.5]} />
       <Artist position={[1.35, 0.9, -9.5]} />
     </group>
-  )
+  );
 }
 
 function SeatedPassenger({
   position,
-  orientation = 'left',
+  orientation = "left",
   torsoColor,
   accentColor,
-  beltColor = '#1f2937',
+  beltColor = "#1f2937",
   bottomColor,
   shoeColor,
   hairColor,
-  hairStyle = 'short',
+  hairStyle = "short",
   skinTone = SKIN_TONES.fair,
-  expression = 'smile',
+  expression = "smile",
   headAccessory = null,
   leftArmConfig,
   rightArmConfig,
   lean = 0,
   scale = 1,
   onUpdate,
-  children
+  children,
 }) {
-  const groupRef = useRef()
-  const headRef = useRef()
-  const leftForearmRef = useRef()
-  const rightForearmRef = useRef()
-  const baseY = position[1]
+  const groupRef = useRef();
+  const headRef = useRef();
+  const leftForearmRef = useRef();
+  const rightForearmRef = useRef();
+  const baseY = position[1];
 
-  const rotationY = orientation === 'left' ? Math.PI / 2 : orientation === 'right' ? -Math.PI / 2 : 0
+  const rotationY =
+    orientation === "left"
+      ? Math.PI / 2
+      : orientation === "right"
+      ? -Math.PI / 2
+      : 0;
 
   const armDefaults = {
     upperRotation: [-0.32, 0, 0],
@@ -67,43 +72,52 @@ function SeatedPassenger({
     wristOffset: [0, -0.22, 0.12],
     handRotation: [0, 0, 0],
     accessory: null,
-    animation: null
-  }
+    animation: null,
+  };
 
-  const leftConfig = { ...armDefaults, ...leftArmConfig }
-  const rightConfig = { ...armDefaults, ...rightArmConfig }
+  const leftConfig = { ...armDefaults, ...leftArmConfig };
+  const rightConfig = { ...armDefaults, ...rightArmConfig };
 
   useFrame((state) => {
-    const t = state.clock.getElapsedTime()
+    const t = state.clock.getElapsedTime();
     if (groupRef.current) {
-      groupRef.current.position.y = baseY + Math.sin(t * 1.2) * 0.015
+      groupRef.current.position.y = baseY + Math.sin(t * 1.2) * 0.015;
     }
     if (headRef.current) {
-      headRef.current.rotation.y = Math.sin(t * 0.7) * 0.08
-      headRef.current.rotation.x = Math.sin(t * 0.55) * 0.04
+      headRef.current.rotation.y = Math.sin(t * 0.7) * 0.08;
+      headRef.current.rotation.x = Math.sin(t * 0.55) * 0.04;
     }
     if (leftConfig.animation && leftForearmRef.current) {
-      leftConfig.animation(state, leftForearmRef.current)
+      leftConfig.animation(state, leftForearmRef.current);
     }
     if (rightConfig.animation && rightForearmRef.current) {
-      rightConfig.animation(state, rightForearmRef.current)
+      rightConfig.animation(state, rightForearmRef.current);
     }
     if (onUpdate) {
       onUpdate(state, {
         group: groupRef.current,
         head: headRef.current,
         leftForearm: leftForearmRef.current,
-        rightForearm: rightForearmRef.current
-      })
+        rightForearm: rightForearmRef.current,
+      });
     }
-  })
+  });
 
   return (
-    <group position={position} rotation={[0, rotationY, 0]} scale={scale} ref={groupRef}>
+    <group
+      position={position}
+      rotation={[0, rotationY, 0]}
+      scale={scale}
+      ref={groupRef}
+    >
       <group rotation={[lean, 0, 0]}>
         <Leg side="left" pantsColor={bottomColor} shoeColor={shoeColor} />
         <Leg side="right" pantsColor={bottomColor} shoeColor={shoeColor} />
-        <Torso torsoColor={torsoColor} accentColor={accentColor} beltColor={beltColor} />
+        <Torso
+          torsoColor={torsoColor}
+          accentColor={accentColor}
+          beltColor={beltColor}
+        />
         <Arm
           side="left"
           sleeveColor={torsoColor}
@@ -137,11 +151,11 @@ function SeatedPassenger({
         {children}
       </group>
     </group>
-  )
+  );
 }
 
 function Leg({ side, pantsColor, shoeColor }) {
-  const offsetX = side === 'left' ? -0.12 : 0.12
+  const offsetX = side === "left" ? -0.12 : 0.12;
 
   return (
     <group position={[offsetX, 0.24, 0.06]}>
@@ -149,16 +163,24 @@ function Leg({ side, pantsColor, shoeColor }) {
         <capsuleGeometry args={[0.055, 0.26, 14, 18]} />
         <meshStandardMaterial color={pantsColor} roughness={0.6} />
       </mesh>
-      <mesh position={[0, -0.3, 0.18]} rotation={[Math.PI / 12, 0, 0]} castShadow>
+      <mesh
+        position={[0, -0.3, 0.18]}
+        rotation={[Math.PI / 12, 0, 0]}
+        castShadow
+      >
         <capsuleGeometry args={[0.048, 0.22, 14, 18]} />
         <meshStandardMaterial color={pantsColor} roughness={0.6} />
       </mesh>
       <mesh position={[0, -0.45, 0.22]} castShadow>
         <boxGeometry args={[0.14, 0.06, 0.26]} />
-        <meshStandardMaterial color={shoeColor} metalness={0.3} roughness={0.45} />
+        <meshStandardMaterial
+          color={shoeColor}
+          metalness={0.3}
+          roughness={0.45}
+        />
       </mesh>
     </group>
-  )
+  );
 }
 
 function Arm({
@@ -170,10 +192,10 @@ function Arm({
   wristOffset,
   handRotation,
   accessory,
-  elbowRef
+  elbowRef,
 }) {
-  const shoulderX = side === 'left' ? -0.28 : 0.28
-  const shoulderTwist = side === 'left' ? 0.08 : -0.08
+  const shoulderX = side === "left" ? -0.28 : 0.28;
+  const shoulderTwist = side === "left" ? 0.08 : -0.08;
 
   return (
     <group position={[shoulderX, 0.62, -0.02]} rotation={[0, shoulderTwist, 0]}>
@@ -199,7 +221,7 @@ function Arm({
         <meshStandardMaterial color={skinTone} roughness={0.5} />
       </mesh>
     </group>
-  )
+  );
 }
 
 function Torso({ torsoColor, accentColor, beltColor }) {
@@ -212,20 +234,35 @@ function Torso({ torsoColor, accentColor, beltColor }) {
       {accentColor && (
         <mesh position={[0, -0.1, 0.18]} castShadow>
           <boxGeometry args={[0.28, 0.18, 0.18]} />
-          <meshStandardMaterial color={accentColor} roughness={0.55} metalness={0.15} />
+          <meshStandardMaterial
+            color={accentColor}
+            roughness={0.55}
+            metalness={0.15}
+          />
         </mesh>
       )}
       {beltColor && (
         <mesh position={[0, -0.26, 0.05]} castShadow>
           <boxGeometry args={[0.3, 0.06, 0.2]} />
-          <meshStandardMaterial color={beltColor} roughness={0.4} metalness={0.2} />
+          <meshStandardMaterial
+            color={beltColor}
+            roughness={0.4}
+            metalness={0.2}
+          />
         </mesh>
       )}
     </group>
-  )
+  );
 }
 
-function Head({ headRef, skinTone, hairColor, hairStyle, expression, accessory }) {
+function Head({
+  headRef,
+  skinTone,
+  hairColor,
+  hairStyle,
+  expression,
+  accessory,
+}) {
   return (
     <group ref={headRef} position={[0, 0.94, -0.02]}>
       <mesh castShadow>
@@ -260,41 +297,45 @@ function Head({ headRef, skinTone, hairColor, hairStyle, expression, accessory }
       <Hair hairStyle={hairStyle} hairColor={hairColor} />
       {accessory}
     </group>
-  )
+  );
 }
 
 function Ears({ skinTone }) {
   return (
     <>
-      <mesh position={[-0.12, 0.0, 0]}> 
-        <sphereGeometry args={[0.035, 10, 10, 0, Math.PI * 2, Math.PI / 4, Math.PI / 2]} />
+      <mesh position={[-0.12, 0.0, 0]}>
+        <sphereGeometry
+          args={[0.035, 10, 10, 0, Math.PI * 2, Math.PI / 4, Math.PI / 2]}
+        />
         <meshStandardMaterial color={skinTone} roughness={0.5} />
       </mesh>
       <mesh position={[0.12, 0.0, 0]}>
-        <sphereGeometry args={[0.035, 10, 10, 0, Math.PI * 2, Math.PI / 4, Math.PI / 2]} />
+        <sphereGeometry
+          args={[0.035, 10, 10, 0, Math.PI * 2, Math.PI / 4, Math.PI / 2]}
+        />
         <meshStandardMaterial color={skinTone} roughness={0.5} />
       </mesh>
     </>
-  )
+  );
 }
 
 function Mouth({ expression }) {
-  if (expression === 'smile') {
+  if (expression === "smile") {
     return (
       <mesh position={[0, -0.07, 0.132]} rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[0.036, 0.008, 8, 24, Math.PI]} />
         <meshStandardMaterial color="#d14c50" roughness={0.4} />
       </mesh>
-    )
+    );
   }
 
-  if (expression === 'thinking') {
+  if (expression === "thinking") {
     return (
       <mesh position={[0, -0.068, 0.131]} rotation={[0, 0, 0]}>
         <boxGeometry args={[0.05, 0.01, 0.01]} />
         <meshStandardMaterial color="#cbd5f5" roughness={0.3} />
       </mesh>
-    )
+    );
   }
 
   return (
@@ -302,16 +343,18 @@ function Mouth({ expression }) {
       <boxGeometry args={[0.045, 0.01, 0.012]} />
       <meshStandardMaterial color="#cbd5f5" roughness={0.3} />
     </mesh>
-  )
+  );
 }
 
 function Hair({ hairStyle, hairColor }) {
   switch (hairStyle) {
-    case 'bun':
+    case "bun":
       return (
         <>
           <mesh position={[0, 0.045, -0.005]}>
-            <sphereGeometry args={[0.162, 28, 20, 0, Math.PI * 2, 0, Math.PI / 1.35]} />
+            <sphereGeometry
+              args={[0.162, 28, 20, 0, Math.PI * 2, 0, Math.PI / 1.35]}
+            />
             <meshStandardMaterial color={hairColor} roughness={0.6} />
           </mesh>
           <mesh position={[0, 0.19, -0.02]}>
@@ -319,19 +362,23 @@ function Hair({ hairStyle, hairColor }) {
             <meshStandardMaterial color={hairColor} roughness={0.55} />
           </mesh>
         </>
-      )
-    case 'bob':
+      );
+    case "bob":
       return (
         <mesh position={[0, -0.02, 0.02]} scale={[1, 0.92, 1.05]}>
-          <sphereGeometry args={[0.18, 28, 20, 0, Math.PI * 2, Math.PI / 5, Math.PI / 1.2]} />
+          <sphereGeometry
+            args={[0.18, 28, 20, 0, Math.PI * 2, Math.PI / 5, Math.PI / 1.2]}
+          />
           <meshStandardMaterial color={hairColor} roughness={0.6} />
         </mesh>
-      )
-    case 'ponytail':
+      );
+    case "ponytail":
       return (
         <>
           <mesh position={[0, 0.04, 0]}>
-            <sphereGeometry args={[0.16, 28, 20, 0, Math.PI * 2, 0, Math.PI / 1.6]} />
+            <sphereGeometry
+              args={[0.16, 28, 20, 0, Math.PI * 2, 0, Math.PI / 1.6]}
+            />
             <meshStandardMaterial color={hairColor} roughness={0.6} />
           </mesh>
           <mesh position={[0, -0.05, -0.18]} rotation={[Math.PI / 2, 0, 0]}>
@@ -339,53 +386,64 @@ function Hair({ hairStyle, hairColor }) {
             <meshStandardMaterial color={hairColor} roughness={0.6} />
           </mesh>
         </>
-      )
-    case 'curly':
+      );
+    case "curly":
       return (
         <group position={[0, 0.05, -0.01]}>
-          {[[-0.08, 0.06, 0.06], [0.08, 0.05, 0.05], [0, 0.1, -0.02], [-0.1, -0.02, -0.04], [0.1, -0.02, -0.05]].map((pos, idx) => (
+          {[
+            [-0.08, 0.06, 0.06],
+            [0.08, 0.05, 0.05],
+            [0, 0.1, -0.02],
+            [-0.1, -0.02, -0.04],
+            [0.1, -0.02, -0.05],
+          ].map((pos, idx) => (
             <mesh key={idx} position={pos}>
               <sphereGeometry args={[0.08, 18, 18]} />
               <meshStandardMaterial color={hairColor} roughness={0.55} />
             </mesh>
           ))}
         </group>
-      )
-    case 'pixie':
+      );
+    case "pixie":
       return (
         <mesh position={[0, 0.04, 0]} scale={[1, 0.6, 1]}>
-          <sphereGeometry args={[0.16, 26, 18, 0, Math.PI * 2, 0, Math.PI / 1.4]} />
+          <sphereGeometry
+            args={[0.16, 26, 18, 0, Math.PI * 2, 0, Math.PI / 1.4]}
+          />
           <meshStandardMaterial color={hairColor} roughness={0.6} />
         </mesh>
-      )
-    case 'short':
+      );
+    case "short":
       return (
         <mesh position={[0, 0.04, 0]}>
-          <sphereGeometry args={[0.16, 26, 18, 0, Math.PI * 2, 0, Math.PI / 1.5]} />
+          <sphereGeometry
+            args={[0.16, 26, 18, 0, Math.PI * 2, 0, Math.PI / 1.5]}
+          />
           <meshStandardMaterial color={hairColor} roughness={0.6} />
         </mesh>
-      )
-    case 'undercut':
+      );
+    case "undercut":
       return (
         <>
           <mesh position={[0, 0.02, 0]}>
-            <sphereGeometry args={[0.16, 26, 20, 0, Math.PI * 2, 0, Math.PI / 1.7]} />
+            <sphereGeometry
+              args={[0.16, 26, 20, 0, Math.PI * 2, 0, Math.PI / 1.7]}
+            />
             <meshStandardMaterial color={hairColor} roughness={0.55} />
           </mesh>
-          <mesh position={[0, -0.04, 0]}
-            scale={[1, 0.3, 1]}>
+          <mesh position={[0, -0.04, 0]} scale={[1, 0.3, 1]}>
             <sphereGeometry args={[0.17, 20, 16]} />
             <meshStandardMaterial color="#2f3544" roughness={0.5} />
           </mesh>
         </>
-      )
+      );
     default:
-      return null
+      return null;
   }
 }
 
 function BusinessMan({ position }) {
-  const laptopRef = useRef()
+  const laptopRef = useRef();
 
   return (
     <SeatedPassenger
@@ -402,17 +460,17 @@ function BusinessMan({ position }) {
       leftArmConfig={{
         upperRotation: [-0.4, 0.18, 0.25],
         forearmRotation: [-1.25, 0.38, 0.2],
-        wristOffset: [0, -0.22, 0.09]
+        wristOffset: [0, -0.22, 0.09],
       }}
       rightArmConfig={{
         upperRotation: [-0.38, -0.18, -0.2],
         forearmRotation: [-1.28, -0.35, -0.18],
-        wristOffset: [0, -0.22, 0.09]
+        wristOffset: [0, -0.22, 0.09],
       }}
       onUpdate={(state) => {
         if (laptopRef.current) {
-          const t = state.clock.getElapsedTime()
-          laptopRef.current.rotation.x = -0.95 + Math.sin(t * 0.8) * 0.05
+          const t = state.clock.getElapsedTime();
+          laptopRef.current.rotation.x = -0.95 + Math.sin(t * 0.8) * 0.05;
         }
       }}
     >
@@ -420,10 +478,15 @@ function BusinessMan({ position }) {
       <Laptop ref={laptopRef} />
       <mesh position={[0, 0.65, 0.22]}>
         <boxGeometry args={[0.22, 0.08, 0.12]} />
-        <meshStandardMaterial color="#0ea5e9" emissive="#0ea5e9" emissiveIntensity={0.12} roughness={0.4} />
+        <meshStandardMaterial
+          color="#0ea5e9"
+          emissive="#0ea5e9"
+          emissiveIntensity={0.12}
+          roughness={0.4}
+        />
       </mesh>
     </SeatedPassenger>
-  )
+  );
 }
 
 const Laptop = forwardRef(function Laptop(_, ref) {
@@ -431,37 +494,55 @@ const Laptop = forwardRef(function Laptop(_, ref) {
     <group ref={ref} position={[0, 0.32, 0.2]}>
       <mesh castShadow>
         <boxGeometry args={[0.28, 0.02, 0.18]} />
-        <meshStandardMaterial color="#374151" metalness={0.6} roughness={0.35} />
+        <meshStandardMaterial
+          color="#374151"
+          metalness={0.6}
+          roughness={0.35}
+        />
       </mesh>
       <mesh position={[0, 0.14, -0.06]} castShadow>
         <boxGeometry args={[0.28, 0.18, 0.02]} />
-        <meshStandardMaterial color="#0f172a" emissive="#2563eb" emissiveIntensity={0.25} roughness={0.2} />
+        <meshStandardMaterial
+          color="#0f172a"
+          emissive="#2563eb"
+          emissiveIntensity={0.25}
+          roughness={0.2}
+        />
       </mesh>
       <mesh position={[0, 0.14, -0.055]}>
         <boxGeometry args={[0.22, 0.14, 0.002]} />
-        <meshStandardMaterial color="#2563eb" emissive="#38bdf8" emissiveIntensity={0.25} roughness={0.25} />
+        <meshStandardMaterial
+          color="#2563eb"
+          emissive="#38bdf8"
+          emissiveIntensity={0.25}
+          roughness={0.25}
+        />
       </mesh>
     </group>
-  )
-})
+  );
+});
 
 function Tie() {
   return (
     <group position={[0, 0.56, 0.12]}>
       <mesh castShadow>
         <boxGeometry args={[0.06, 0.22, 0.02]} />
-        <meshStandardMaterial color="#c026d3" roughness={0.45} metalness={0.15} />
+        <meshStandardMaterial
+          color="#c026d3"
+          roughness={0.45}
+          metalness={0.15}
+        />
       </mesh>
       <mesh position={[0, 0.14, 0]} castShadow>
         <coneGeometry args={[0.035, 0.12, 16]} />
         <meshStandardMaterial color="#a21caf" roughness={0.4} metalness={0.1} />
       </mesh>
     </group>
-  )
+  );
 }
 
 function Student({ position }) {
-  const bookRef = useRef()
+  const bookRef = useRef();
 
   return (
     <SeatedPassenger
@@ -481,18 +562,18 @@ function Student({ position }) {
         forearmRotation: [-1.1, -0.3, -0.12],
         wristOffset: [0, -0.26, 0.06],
         handRotation: [-0.4, 0, 0],
-        accessory: <Book ref={bookRef} />
+        accessory: <Book ref={bookRef} />,
       }}
       rightArmConfig={{
         upperRotation: [-0.48, 0.28, 0.22],
         forearmRotation: [-0.9, 0.2, 0.1],
         wristOffset: [0, -0.2, 0.04],
-        handRotation: [0.5, 0, 0]
+        handRotation: [0.5, 0, 0],
       }}
       onUpdate={(state) => {
         if (bookRef.current) {
-          const t = state.clock.getElapsedTime()
-          bookRef.current.rotation.x = -0.4 + Math.sin(t * 1.5) * 0.05
+          const t = state.clock.getElapsedTime();
+          bookRef.current.rotation.x = -0.4 + Math.sin(t * 1.5) * 0.05;
         }
       }}
     >
@@ -502,7 +583,7 @@ function Student({ position }) {
         <meshStandardMaterial color="#facc15" roughness={0.35} />
       </mesh>
     </SeatedPassenger>
-  )
+  );
 }
 
 const Book = forwardRef(function Book(_, ref) {
@@ -517,8 +598,8 @@ const Book = forwardRef(function Book(_, ref) {
         <meshStandardMaterial color="#ef4444" roughness={0.4} />
       </mesh>
     </group>
-  )
-})
+  );
+});
 
 function BackpackStrap() {
   return (
@@ -528,7 +609,7 @@ function BackpackStrap() {
         <meshStandardMaterial color="#1f2937" roughness={0.4} />
       </mesh>
     </group>
-  )
+  );
 }
 
 function Elderly({ position }) {
@@ -549,19 +630,19 @@ function Elderly({ position }) {
       leftArmConfig={{
         upperRotation: [-0.2, 0.12, 0.2],
         forearmRotation: [-0.9, 0.2, 0.15],
-        wristOffset: [0, -0.24, 0.1]
+        wristOffset: [0, -0.24, 0.1],
       }}
       rightArmConfig={{
         upperRotation: [-0.05, -0.32, -0.18],
         forearmRotation: [-1.25, -0.2, -0.05],
         wristOffset: [0, -0.22, 0.1],
         handRotation: [0, 0, 0],
-        accessory: <Cane />
+        accessory: Cane,
       }}
     >
       <Scarf color="#d1d5db" />
     </SeatedPassenger>
-  )
+  );
 }
 
 function Glasses() {
@@ -588,7 +669,7 @@ function Glasses() {
         <meshStandardMaterial color="#cbd5f5" metalness={0.4} roughness={0.2} />
       </mesh>
     </group>
-  )
+  );
 }
 
 const Cane = (
@@ -602,7 +683,7 @@ const Cane = (
       <meshStandardMaterial color="#cbd5f5" metalness={0.6} roughness={0.3} />
     </mesh>
   </group>
-)
+);
 
 function Scarf({ color }) {
   return (
@@ -620,11 +701,11 @@ function Scarf({ color }) {
         <meshStandardMaterial color={color} roughness={0.45} />
       </mesh>
     </group>
-  )
+  );
 }
 
 function Mother({ position }) {
-  const babyRef = useRef()
+  const babyRef = useRef();
 
   return (
     <SeatedPassenger
@@ -644,17 +725,17 @@ function Mother({ position }) {
         forearmRotation: [-1.35, -0.3, -0.15],
         wristOffset: [0, -0.18, 0.12],
         handRotation: [0.3, 0, 0],
-        accessory: <Baby ref={babyRef} />
+        accessory: <Baby ref={babyRef} />,
       }}
       rightArmConfig={{
         upperRotation: [-0.35, 0.28, 0.18],
         forearmRotation: [-0.9, 0.22, 0.1],
-        wristOffset: [0, -0.22, 0.08]
+        wristOffset: [0, -0.22, 0.08],
       }}
       onUpdate={(state) => {
         if (babyRef.current) {
-          const t = state.clock.getElapsedTime()
-          babyRef.current.position.y = Math.sin(t * 1.4) * 0.02
+          const t = state.clock.getElapsedTime();
+          babyRef.current.position.y = Math.sin(t * 1.4) * 0.02;
         }
       }}
     >
@@ -663,7 +744,7 @@ function Mother({ position }) {
         <meshStandardMaterial color="#fbbf24" roughness={0.4} />
       </mesh>
     </SeatedPassenger>
-  )
+  );
 }
 
 const Baby = forwardRef(function Baby(_, ref) {
@@ -682,11 +763,11 @@ const Baby = forwardRef(function Baby(_, ref) {
         <meshStandardMaterial color="#ea580c" roughness={0.5} />
       </mesh>
     </group>
-  )
-})
+  );
+});
 
 function Worker({ position }) {
-  const toolRef = useRef()
+  const toolRef = useRef();
 
   return (
     <SeatedPassenger
@@ -705,7 +786,7 @@ function Worker({ position }) {
       leftArmConfig={{
         upperRotation: [-0.4, 0.18, 0.25],
         forearmRotation: [-1.15, 0.3, 0.18],
-        wristOffset: [0, -0.22, 0.08]
+        wristOffset: [0, -0.22, 0.08],
       }}
       rightArmConfig={{
         upperRotation: [-0.2, -0.38, -0.2],
@@ -714,17 +795,21 @@ function Worker({ position }) {
         handRotation: [0, 0, 0],
         accessory: <Tool ref={toolRef} />,
         animation: (state, forearm) => {
-          const t = state.clock.getElapsedTime()
-          forearm.rotation.z = Math.sin(t * 2.1) * 0.3 - 0.2
-        }
+          const t = state.clock.getElapsedTime();
+          forearm.rotation.z = Math.sin(t * 2.1) * 0.3 - 0.2;
+        },
       }}
     >
       <mesh position={[0, 0.5, 0.24]}>
         <boxGeometry args={[0.24, 0.08, 0.16]} />
-        <meshStandardMaterial color="#1f2937" roughness={0.45} metalness={0.25} />
+        <meshStandardMaterial
+          color="#1f2937"
+          roughness={0.45}
+          metalness={0.25}
+        />
       </mesh>
     </SeatedPassenger>
-  )
+  );
 }
 
 function Helmet() {
@@ -732,14 +817,18 @@ function Helmet() {
     <group position={[0, 0.14, 0]}>
       <mesh>
         <sphereGeometry args={[0.18, 24, 18, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial color="#fde047" roughness={0.35} metalness={0.2} />
+        <meshStandardMaterial
+          color="#fde047"
+          roughness={0.35}
+          metalness={0.2}
+        />
       </mesh>
       <mesh position={[0, -0.03, 0.12]}>
         <boxGeometry args={[0.24, 0.04, 0.12]} />
         <meshStandardMaterial color="#1f2937" roughness={0.4} />
       </mesh>
     </group>
-  )
+  );
 }
 
 const Tool = forwardRef(function Tool(_, ref) {
@@ -754,11 +843,11 @@ const Tool = forwardRef(function Tool(_, ref) {
         <meshStandardMaterial color="#f59e0b" roughness={0.4} />
       </mesh>
     </group>
-  )
-})
+  );
+});
 
 function Tourist({ position }) {
-  const cameraRef = useRef()
+  const cameraRef = useRef();
 
   return (
     <SeatedPassenger
@@ -778,19 +867,19 @@ function Tourist({ position }) {
         upperRotation: [-0.48, -0.2, -0.28],
         forearmRotation: [-1.3, -0.24, -0.16],
         wristOffset: [0, -0.18, 0.16],
-        handRotation: [0.4, 0, 0]
+        handRotation: [0.4, 0, 0],
       }}
       rightArmConfig={{
         upperRotation: [-0.32, 0.28, 0.2],
         forearmRotation: [-1.05, 0.22, 0.14],
         wristOffset: [0, -0.24, 0.08],
-        accessory: <Camera ref={cameraRef} />
+        accessory: <Camera ref={cameraRef} />,
       }}
       onUpdate={(state) => {
         if (cameraRef.current) {
-          const t = state.clock.getElapsedTime()
-          cameraRef.current.rotation.y = Math.sin(t * 1.8) * 0.4
-          cameraRef.current.rotation.x = -0.3 + Math.sin(t * 1.2) * 0.2
+          const t = state.clock.getElapsedTime();
+          cameraRef.current.rotation.y = Math.sin(t * 1.8) * 0.4;
+          cameraRef.current.rotation.x = -0.3 + Math.sin(t * 1.2) * 0.2;
         }
       }}
     >
@@ -799,7 +888,7 @@ function Tourist({ position }) {
         <meshStandardMaterial color="#ef4444" roughness={0.4} />
       </mesh>
     </SeatedPassenger>
-  )
+  );
 }
 
 const Camera = forwardRef(function Camera(_, ref) {
@@ -807,19 +896,31 @@ const Camera = forwardRef(function Camera(_, ref) {
     <group ref={ref} position={[0, -0.03, 0]}>
       <mesh castShadow>
         <boxGeometry args={[0.16, 0.12, 0.08]} />
-        <meshStandardMaterial color="#0f172a" metalness={0.6} roughness={0.35} />
+        <meshStandardMaterial
+          color="#0f172a"
+          metalness={0.6}
+          roughness={0.35}
+        />
       </mesh>
       <mesh position={[0, 0, 0.06]}>
-        <cylinderGeometry args={[0.045, 0.045, 0.08, 16]} rotation={[Math.PI / 2, 0, 0]} />
+        <cylinderGeometry
+          args={[0.045, 0.045, 0.08, 16]}
+          rotation={[Math.PI / 2, 0, 0]}
+        />
         <meshStandardMaterial color="#1f2937" metalness={0.7} roughness={0.3} />
       </mesh>
       <mesh position={[0, 0.04, -0.05]}>
         <boxGeometry args={[0.12, 0.02, 0.02]} />
-        <meshStandardMaterial color="#38bdf8" emissive="#38bdf8" emissiveIntensity={0.25} roughness={0.2} />
+        <meshStandardMaterial
+          color="#38bdf8"
+          emissive="#38bdf8"
+          emissiveIntensity={0.25}
+          roughness={0.2}
+        />
       </mesh>
     </group>
-  )
-})
+  );
+});
 
 function SunGlasses() {
   return (
@@ -837,7 +938,7 @@ function SunGlasses() {
         <meshStandardMaterial color="#0f172a" metalness={0.6} roughness={0.2} />
       </mesh>
     </group>
-  )
+  );
 }
 
 function Doctor({ position }) {
@@ -860,23 +961,23 @@ function Doctor({ position }) {
         forearmRotation: [-1.18, 0.16, 0.1],
         wristOffset: [0, -0.18, 0.06],
         handRotation: [0.3, 0, 0],
-        accessory: <Clipboard />
+        accessory: Clipboard,
       }}
       rightArmConfig={{
         upperRotation: [-0.15, -0.3, -0.12],
         forearmRotation: [-1.05, -0.24, -0.06],
-        wristOffset: [0, -0.22, 0.1]
+        wristOffset: [0, -0.22, 0.1],
       }}
       onUpdate={(state, refs) => {
         if (refs.head) {
-          const t = state.clock.getElapsedTime()
-          refs.head.rotation.z = Math.sin(t * 0.6) * 0.08
+          const t = state.clock.getElapsedTime();
+          refs.head.rotation.z = Math.sin(t * 0.6) * 0.08;
         }
       }}
     >
       <Stethoscope />
     </SeatedPassenger>
-  )
+  );
 }
 
 function Headband({ color }) {
@@ -885,7 +986,7 @@ function Headband({ color }) {
       <torusGeometry args={[0.16, 0.015, 12, 24, Math.PI]} />
       <meshStandardMaterial color={color} roughness={0.4} />
     </mesh>
-  )
+  );
 }
 
 const Clipboard = (
@@ -899,7 +1000,7 @@ const Clipboard = (
       <meshStandardMaterial color="#f8fafc" roughness={0.2} />
     </mesh>
   </group>
-)
+);
 
 function Stethoscope() {
   return (
@@ -918,14 +1019,18 @@ function Stethoscope() {
       </mesh>
       <mesh position={[0, -0.32, 0]}>
         <sphereGeometry args={[0.02, 12, 12]} />
-        <meshStandardMaterial color="#38bdf8" emissive="#38bdf8" emissiveIntensity={0.25} />
+        <meshStandardMaterial
+          color="#38bdf8"
+          emissive="#38bdf8"
+          emissiveIntensity={0.25}
+        />
       </mesh>
     </group>
-  )
+  );
 }
 
 function Artist({ position }) {
-  const brushRef = useRef()
+  const brushRef = useRef();
 
   return (
     <SeatedPassenger
@@ -944,25 +1049,25 @@ function Artist({ position }) {
         upperRotation: [-0.28, -0.36, -0.24],
         forearmRotation: [-1.1, -0.3, -0.2],
         wristOffset: [0, -0.18, 0.18],
-        accessory: <Palette />
+        accessory: Palette,
       }}
       rightArmConfig={{
         upperRotation: [-0.2, 0.4, 0.22],
         forearmRotation: [-1.35, 0.32, 0.18],
         wristOffset: [0, -0.18, 0.14],
-        accessory: <Brush ref={brushRef} />
+        accessory: <Brush ref={brushRef} />,
       }}
       onUpdate={(state) => {
         if (brushRef.current) {
-          const t = state.clock.getElapsedTime()
-          brushRef.current.rotation.z = Math.sin(t * 2.2) * 0.4 + 0.3
-          brushRef.current.position.x = Math.sin(t * 2.2) * 0.05
+          const t = state.clock.getElapsedTime();
+          brushRef.current.rotation.z = Math.sin(t * 2.2) * 0.4 + 0.3;
+          brushRef.current.position.x = Math.sin(t * 2.2) * 0.05;
         }
       }}
     >
       <Scarf color="#fb7185" />
     </SeatedPassenger>
-  )
+  );
 }
 
 const Palette = (
@@ -971,14 +1076,18 @@ const Palette = (
       <torusGeometry args={[0.12, 0.04, 12, 24]} />
       <meshStandardMaterial color="#d9d3ce" roughness={0.4} />
     </mesh>
-    {[[0.08, 0.04, '#ef4444'], [-0.06, 0.06, '#3b82f6'], [0.02, -0.06, '#22c55e']].map(([x, y, color], idx) => (
+    {[
+      [0.08, 0.04, "#ef4444"],
+      [-0.06, 0.06, "#3b82f6"],
+      [0.02, -0.06, "#22c55e"],
+    ].map(([x, y, color], idx) => (
       <mesh key={idx} position={[x, y, 0.02]}>
         <sphereGeometry args={[0.018, 12, 12]} />
         <meshStandardMaterial color={color} roughness={0.3} />
       </mesh>
     ))}
   </group>
-)
+);
 
 const Brush = forwardRef(function Brush(_, ref) {
   return (
@@ -992,23 +1101,23 @@ const Brush = forwardRef(function Brush(_, ref) {
         <meshStandardMaterial color="#ef4444" roughness={0.4} />
       </mesh>
     </group>
-  )
-})
+  );
+});
 
 function Child({ position }) {
-  const groupRef = useRef()
-  const toyRef = useRef()
+  const groupRef = useRef();
+  const toyRef = useRef();
 
   useFrame((state) => {
-    const t = state.clock.getElapsedTime()
+    const t = state.clock.getElapsedTime();
     if (groupRef.current) {
-      groupRef.current.position.y = position[1] + Math.sin(t * 1.8) * 0.06
-      groupRef.current.rotation.y = Math.sin(t * 1.4) * 0.25
+      groupRef.current.position.y = position[1] + Math.sin(t * 1.8) * 0.06;
+      groupRef.current.rotation.y = Math.sin(t * 1.4) * 0.25;
     }
     if (toyRef.current) {
-      toyRef.current.rotation.x = Math.sin(t * 2) * 0.6
+      toyRef.current.rotation.x = Math.sin(t * 2) * 0.6;
     }
-  })
+  });
 
   return (
     <group position={position} ref={groupRef}>
@@ -1021,7 +1130,9 @@ function Child({ position }) {
         <meshStandardMaterial color={SKIN_TONES.fair} roughness={0.55} />
       </mesh>
       <mesh position={[0, 0.54, -0.02]}>
-        <sphereGeometry args={[0.12, 18, 18, 0, Math.PI * 2, 0, Math.PI / 1.8]} />
+        <sphereGeometry
+          args={[0.12, 18, 18, 0, Math.PI * 2, 0, Math.PI / 1.8]}
+        />
         <meshStandardMaterial color={HAIR_COLORS.red} roughness={0.6} />
       </mesh>
       <mesh position={[-0.05, 0.48, 0.09]}>
@@ -1037,20 +1148,36 @@ function Child({ position }) {
         <meshStandardMaterial color="#cbd5f5" roughness={0.4} />
       </mesh>
 
-      <mesh position={[-0.11, 0.27, 0]} rotation={[Math.PI / 2.2, 0, 0]} castShadow>
+      <mesh
+        position={[-0.11, 0.27, 0]}
+        rotation={[Math.PI / 2.2, 0, 0]}
+        castShadow
+      >
         <capsuleGeometry args={[0.03, 0.18, 10, 14]} />
         <meshStandardMaterial color="#fbbf24" roughness={0.6} />
       </mesh>
-      <mesh position={[0.11, 0.27, 0]} rotation={[Math.PI / 2.2, 0, 0]} castShadow>
+      <mesh
+        position={[0.11, 0.27, 0]}
+        rotation={[Math.PI / 2.2, 0, 0]}
+        castShadow
+      >
         <capsuleGeometry args={[0.03, 0.18, 10, 14]} />
         <meshStandardMaterial color="#fbbf24" roughness={0.6} />
       </mesh>
 
-      <mesh position={[-0.06, 0.05, 0.05]} rotation={[Math.PI / 9, 0, 0]} castShadow>
+      <mesh
+        position={[-0.06, 0.05, 0.05]}
+        rotation={[Math.PI / 9, 0, 0]}
+        castShadow
+      >
         <capsuleGeometry args={[0.03, 0.18, 10, 14]} />
         <meshStandardMaterial color="#1f2937" roughness={0.5} />
       </mesh>
-      <mesh position={[0.06, 0.05, 0.05]} rotation={[Math.PI / 9, 0, 0]} castShadow>
+      <mesh
+        position={[0.06, 0.05, 0.05]}
+        rotation={[Math.PI / 9, 0, 0]}
+        castShadow
+      >
         <capsuleGeometry args={[0.03, 0.18, 10, 14]} />
         <meshStandardMaterial color="#1f2937" roughness={0.5} />
       </mesh>
@@ -1066,5 +1193,5 @@ function Child({ position }) {
         </mesh>
       </group>
     </group>
-  )
+  );
 }
